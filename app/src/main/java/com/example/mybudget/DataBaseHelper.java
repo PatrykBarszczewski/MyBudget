@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
@@ -24,8 +25,17 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_AMOUNT = "amount";
     public static final String COLUMN_ID = "ID";
 
+    private static DataBaseHelper databaseHelper;
+
     public DataBaseHelper(@Nullable Context context) {
         super(context, "myBudget_DB1", null, 1);
+    }
+
+    public static DataBaseHelper getInstance(Context context) {
+        if (databaseHelper == null) {
+            databaseHelper = new DataBaseHelper(context);
+        }
+        return databaseHelper;
     }
 
     @Override
@@ -102,5 +112,59 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
 
         return returnList;
+    }
+        public int sumOfExpenses(){
+        int result = 0;
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT SUM("+ COLUMN_AMOUNT +") FROM " + USER_EXPENSES, null);
+        if(cursor.moveToFirst()) result = cursor.getInt(0);
+            cursor.close();
+            sqLiteDatabase.close();
+            return result;
+        }
+
+        public boolean addUser(User userUser){
+
+            SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+
+            cv.put(COLUMN_USER_NAME, userUser.getUserName());
+            cv.put(COLUMN_MONTHLY_INCOME, userUser.getMonthlyIncome());
+            cv.put(COLUMN_PLANNED_SAVINGS, userUser.getPlannedSavings());
+
+            long insert = sqLiteDatabase.insert(USER_TABLE, null, cv);
+            if(insert == -1){
+                return false;
+            }else {
+                return true;
+            }
+        }
+
+        public int getMonthlyIncome(){
+
+        int monthlyIncome = 0;
+        String queryString = "SELECT " + COLUMN_MONTHLY_INCOME + "FROM " + USER_TABLE;
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+
+        Cursor cursor = sqLiteDatabase.query(USER_TABLE, new String[] {COLUMN_MONTHLY_INCOME}, null, null, null, null, null);
+            if(cursor.moveToFirst()) monthlyIncome = cursor.getInt(0);
+            cursor.close();
+            sqLiteDatabase.close();
+
+        return monthlyIncome;
+        }
+
+        public int getPlannedSavings(){
+
+        int plannedSavings = 0;
+        String queryString = "SELECT " + COLUMN_PLANNED_SAVINGS + "FROM " + USER_TABLE;
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+
+        Cursor cursor = sqLiteDatabase.query(USER_TABLE, new String[] {COLUMN_PLANNED_SAVINGS}, null, null, null, null, null);
+            if(cursor.moveToFirst()) plannedSavings = cursor.getInt(0);
+            cursor.close();
+            sqLiteDatabase.close();
+
+        return plannedSavings;
     }
 }

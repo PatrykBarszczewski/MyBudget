@@ -1,7 +1,5 @@
 package com.example.mybudget;
 
-import android.text.Editable;
-
 public class Amount {
 
     private int id;
@@ -23,7 +21,6 @@ public class Amount {
     @Override
     public String toString() {
         return "Amount{" +
-                "id='" + id + '\'' +
                 "name='" + name + '\'' +
                 ", date='" + date + '\'' +
                 ", selectedCategory='" + selectedCategory + '\'' +

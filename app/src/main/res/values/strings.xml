@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">MyBudget</string>
+    <string name="dodaj_nowy_wydatek">Dodaj nowy wydatek</string>
+    <string name="wydatek">Wydatek</string>
+    <string name="kwota_wydatku">Kwota wydatku</string>
 </resources>

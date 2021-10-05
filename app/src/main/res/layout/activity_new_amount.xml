@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:inputType="text"/>
+        android:inputType="text"
+        android:hint="@string/wydatek"/>
 
     <Spinner
         android:id="@+id/spinner_category"
@@ -33,7 +34,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_below="@id/spinner_period"
-        android:inputType="number"/>
+        android:inputType="number"
+        android:hint="@string/kwota_wydatku"/>
 
     <Button
         android:id="@+id/add_amount"

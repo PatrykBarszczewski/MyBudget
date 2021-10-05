@@ -58,7 +58,7 @@ public class NewAmount extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> adapterView) {}
         });
 
-        String[] elements2 = {"miesięczny", "kwartalny", "roczny"};
+        String[] elements2 = {"jednorazowy", "miesięczny", "kwartalny", "roczny"};
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, elements2);
         period.setAdapter(adapter2);
 
@@ -70,9 +70,6 @@ public class NewAmount extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {}
         });
-
-//        SQLiteDatabase myBudget_DB = openOrCreateDatabase("myBudget.db", MODE_PRIVATE, null);
-//        myBudget_DB.execSQL("CREATE TABLE IF NOT EXISTS expenses (name VARCHAR(20), date VARCHAR(20), category VARCHAR(30), period VARCHAR(20), amount INT)");
 
         Date data= new Date();
         final Calendar c =Calendar.getInstance();
@@ -87,30 +84,30 @@ public class NewAmount extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-//                DataBaseHelper dataBaseHelper = new DataBaseHelper(NewAmount.this);
-//                List<Amount> everything = dataBaseHelper.showEverything();
-//
-//                ArrayAdapter customArrayAdapter = new ArrayAdapter<Amount>(NewAmount);
+                Integer getAmount = Integer.valueOf(amount.getText().toString());
 
-//                Toast.makeText(NewAmount.this, everything.toString(), Toast.LENGTH_LONG).show();
+                if(getAmount > 0) {
 
-                Amount amountAmount;
+                    Amount amountAmount;
 
-                try {
-                    amountAmount = new Amount(id, name.getText().toString(), date, selectedCategory, selectedPeriod, amount.getText().toString());
-                    Toast.makeText(NewAmount.this, amountAmount.toString(), Toast.LENGTH_LONG).show();
-                }catch (Exception e){
-                    amountAmount = new Amount(id, name.getText().toString(), "error", selectedCategory, "error", amount.getText().toString());
+                    try {
+                        amountAmount = new Amount(id, name.getText().toString(), date, selectedCategory, selectedPeriod, amount.getText().toString());
+                        Toast.makeText(NewAmount.this, amountAmount.toString(), Toast.LENGTH_LONG).show();
+                    }catch (Exception e){
+                        amountAmount = new Amount(id, name.getText().toString(), "error", selectedCategory, "error", amount.getText().toString());
+                    }
+
+                    DataBaseHelper dataBaseHelper = new DataBaseHelper(NewAmount.this);
+
+                    boolean success = dataBaseHelper.addOne(amountAmount);
+
+                    Toast.makeText(NewAmount.this, "Success= "+ success, Toast.LENGTH_LONG).show();
+
+                    Intent wroc = new Intent(NewAmount.this, MainActivity.class);
+                    startActivity(wroc);
+                }else {
+                    Toast.makeText(NewAmount.this, "Wprowadź prawidłową kwotę", Toast.LENGTH_SHORT).show();
                 }
-
-                DataBaseHelper dataBaseHelper = new DataBaseHelper(NewAmount.this);
-
-                boolean success = dataBaseHelper.addOne(amountAmount);
-
-                Toast.makeText(NewAmount.this, "Success= "+ success, Toast.LENGTH_LONG).show();
-
-                Intent wroc = new Intent(NewAmount.this, MainActivity.class);
-                startActivity(wroc);
             }
         });
     }

@@ -38,7 +38,8 @@
         android:layout_height="wrap_content"
         android:hint="Miesięczne dochody"
         android:layout_below="@id/edit_name"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="10dp"
+        android:inputType="number"/>
 
     <EditText
         android:id="@+id/edit_savings"
@@ -46,10 +47,11 @@
         android:layout_height="wrap_content"
         android:hint="Planowane miesięczne oszczędności"
         android:layout_below="@id/edit_earnings"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="10dp"
+        android:inputType="number"/>
 
     <Button
-        android:id="@+id/save"
+        android:id="@+id/save_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/edit_savings"
