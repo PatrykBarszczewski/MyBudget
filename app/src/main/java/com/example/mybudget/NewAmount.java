@@ -15,6 +15,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.net.MalformedURLException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -77,7 +78,9 @@ public class NewAmount extends AppCompatActivity {
         day= dzien;
         month=data.getMonth()+1;
         year=data.getYear()+1900;
-        date= String.valueOf(day)+"."+String.valueOf(month)+"."+String.valueOf(year);
+        date= String.valueOf(year)+"-"+String.valueOf(month)+"-"+String.valueOf(day);
+
+
 
         addAmount = findViewById(R.id.add_amount);
         addAmount.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +94,7 @@ public class NewAmount extends AppCompatActivity {
                     Amount amountAmount;
 
                     try {
-                        amountAmount = new Amount(id, name.getText().toString(), date, selectedCategory, selectedPeriod, amount.getText().toString());
+                        amountAmount = new Amount(id, name.getText().toString(), getCurrentDate(), selectedCategory, selectedPeriod, amount.getText().toString());
                         Toast.makeText(NewAmount.this, amountAmount.toString(), Toast.LENGTH_LONG).show();
                     }catch (Exception e){
                         amountAmount = new Amount(id, name.getText().toString(), "error", selectedCategory, "error", amount.getText().toString());
@@ -110,5 +113,11 @@ public class NewAmount extends AppCompatActivity {
                 }
             }
         });
+    }
+    public static String getCurrentDate(){
+        Date c = Calendar.getInstance().getTime();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String formattedDate = simpleDateFormat.format(c);
+        return formattedDate;
     }
 }

@@ -2,13 +2,18 @@ package com.example.mybudget;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -24,6 +29,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_PERIOD = "period";
     public static final String COLUMN_AMOUNT = "amount";
     public static final String COLUMN_ID = "ID";
+    private String month;
 
     private static DataBaseHelper databaseHelper;
 
@@ -40,6 +46,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
+
+//        final Calendar c = Calendar.getInstance();
+//        int miesiac = c.get(Calendar.MONTH);
+//        month = miesiac + 1;
 
         String createTableStatement1 = "CREATE TABLE " + USER_TABLE + " (" + COLUMN_USER_NAME + " TEXT, "
                 + COLUMN_MONTHLY_INCOME + " INT, " + COLUMN_PLANNED_SAVINGS + " INT)";
@@ -88,13 +98,17 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public List<Amount> showEverything(){
         List<Amount> returnList = new ArrayList<>();
 
+        DateFormat dateFormat = new SimpleDateFormat("MM");
+        Date date = new Date();
+        month = String.valueOf(dateFormat.format(date));
+
         String queryString = "SELECT * FROM " + USER_EXPENSES;
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
 
-        //Cursor cursor = sqLiteDatabase.rawQuery(queryString, null);
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM "+ USER_EXPENSES +" WHERE strftime('%m', "+COLUMN_DATE+")"+ "LIKE " +  month,null);
 
-        Cursor cursor = sqLiteDatabase.query(USER_EXPENSES, null, null,
-                null, null, null, COLUMN_DATE + " DESC", null);
+//        Cursor cursor = sqLiteDatabase.query(USER_EXPENSES, null, null,
+//                null, null, null, COLUMN_DATE + " DESC", null);
 
         if(cursor.moveToFirst()){
             do {
@@ -115,8 +129,16 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
         public int sumOfExpenses(){
         int result = 0;
+            DateFormat dateFormat = new SimpleDateFormat("MM");
+            Date date = new Date();
+            month = String.valueOf(dateFormat.format(date));
+
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        Cursor cursor = sqLiteDatabase.rawQuery("SELECT SUM("+ COLUMN_AMOUNT +") FROM " + USER_EXPENSES, null);
+        /// to nizej dziala
+        //Cursor cursor = sqLiteDatabase.rawQuery("SELECT SUM("+ COLUMN_AMOUNT +") FROM " + USER_EXPENSES , null);
+            //Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM "+ USER_EXPENSES +" WHERE strftime('%m', "+COLUMN_DATE+")"+ "LIKE " +  month,null);
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT SUM("+ COLUMN_AMOUNT +") FROM "+
+                USER_EXPENSES +" WHERE strftime('%m', "+COLUMN_DATE+")"+ "LIKE " +  month,null);
         if(cursor.moveToFirst()) result = cursor.getInt(0);
             cursor.close();
             sqLiteDatabase.close();
