@@ -189,4 +189,48 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         return plannedSavings;
     }
+
+        public int getPercentShopping(){
+
+        int percentShopping = 0;
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT SUM("+ COLUMN_AMOUNT +") FROM "+ USER_EXPENSES +" WHERE "+COLUMN_CATEGORY+" LIKE 'zakupy' ", null);
+        if(cursor.moveToFirst()) percentShopping = cursor.getInt(0);
+        cursor.close();
+        sqLiteDatabase.close();
+        return percentShopping;
+        }
+
+    public int getPercentCharges(){
+
+        int percentCharges = 0;
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT SUM("+ COLUMN_AMOUNT +") FROM "+ USER_EXPENSES +" WHERE "+COLUMN_CATEGORY+" LIKE 'opłaty' ", null);
+        if(cursor.moveToFirst()) percentCharges = cursor.getInt(0);
+        cursor.close();
+        sqLiteDatabase.close();
+        return percentCharges;
+    }
+
+    public int getPercentPleasures(){
+
+        int percentPleasures = 0;
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT SUM("+ COLUMN_AMOUNT +") FROM "+ USER_EXPENSES +" WHERE "+COLUMN_CATEGORY+" LIKE 'przyjemności' ", null);
+        if(cursor.moveToFirst()) percentPleasures = cursor.getInt(0);
+        cursor.close();
+        sqLiteDatabase.close();
+        return percentPleasures;
+    }
+
+    public int getPercentHobby(){
+
+        int percentHobby = 0;
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT SUM("+ COLUMN_AMOUNT +") FROM "+ USER_EXPENSES +" WHERE "+COLUMN_CATEGORY+" LIKE 'hobby' ", null);
+        if(cursor.moveToFirst()) percentHobby = cursor.getInt(0);
+        cursor.close();
+        sqLiteDatabase.close();
+        return percentHobby;
+    }
 }

@@ -20,13 +20,11 @@ public class Amount {
 
     @Override
     public String toString() {
-        return "Amount{" +
-                "name='" + name + '\'' +
-                ", date='" + date + '\'' +
-                ", selectedCategory='" + selectedCategory + '\'' +
-                ", period='" + selectedPeriod + '\'' +
-                ", amount=" + amount +
-                '}';
+        return date + " - " +
+                name + " - " +
+                amount + " zł" + " - \n" +
+                "kategoria: " + selectedCategory + " - " +
+                "wydatek: " + selectedPeriod;
     }
 
     public int getId() {

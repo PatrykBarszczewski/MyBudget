@@ -33,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
     private Integer month;
     private Integer expensesSum, differInt, differInt2;
     private Double num1, num2, num3, difference, difference2, percent, over;
+    private Double sumShopping, sumHobby, sumPleasures, sumCharges;
+    private Double percentShopping, percentHobby, percentPleasures, percentCharges;
+    private int charges, shopping, pleasures, hobby;
     ArrayAdapter customArrayAdapter;
     DataBaseHelper dataBaseHelper;
 
@@ -49,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         dataBaseHelper = new DataBaseHelper(MainActivity.this);
+
+        DataBaseHelper sqLiteDatabase = DataBaseHelper.getInstance(this);
 
         textView_month = findViewById(R.id.month);
 
@@ -69,10 +74,16 @@ public class MainActivity extends AppCompatActivity {
         else if (month == 12) textView_month.setText("GRUDZIEŃ");
 
         textView_analysis = findViewById(R.id.analysis_view);
-        DataBaseHelper sqLiteDatabase = DataBaseHelper.getInstance(this);
+
         num1 = Double.valueOf(sqLiteDatabase.sumOfExpenses());
         num2 = Double.valueOf(sqLiteDatabase.getMonthlyIncome());
         num3 = Double.valueOf(sqLiteDatabase.getPlannedSavings());
+
+        sumCharges = Double.valueOf(sqLiteDatabase.getPercentCharges());
+        sumShopping = Double.valueOf(sqLiteDatabase.getPercentShopping());
+        sumPleasures = Double.valueOf(sqLiteDatabase.getPercentPleasures());
+        sumHobby = Double.valueOf(sqLiteDatabase.getPercentHobby());
+
         textView_analysis.setText("" + sqLiteDatabase.sumOfExpenses() + " " + sqLiteDatabase.getMonthlyIncome() + " " + sqLiteDatabase.getPlannedSavings());
 
         setTextInAnalyseView(sqLiteDatabase);
@@ -97,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Amount clickedExpens = (Amount) parent.getItemAtPosition(position);
 
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle("Usunięcie wydatku");
                 builder.setMessage("Czy chcesz usunąć ten wydatek?");
@@ -106,8 +118,9 @@ public class MainActivity extends AppCompatActivity {
 
                         dataBaseHelper.deleteOne(clickedExpens);
                         refreshList(dataBaseHelper);
-                        //textView_analysis.setText("" + sqLiteDatabase.sumOfExpenses());
                         setTextInAnalyseView(sqLiteDatabase);
+                        finish();
+                        startActivity(getIntent());
                     }
                 });
                 builder.setNegativeButton("Nie", null);
@@ -126,20 +139,49 @@ public class MainActivity extends AppCompatActivity {
             difference = ((num1 / (num2 - num3)) * 100);
             percent = 100 - difference;
             differInt = (int) Math.round(percent);
-            textView_analysis.setText("W tym miesiącu zostało niewykorzystane " + differInt + "% budżetu");
+            percentCharges = ((sumCharges / (num2-num3)) * 100);
+            charges = (int) Math.round(percentCharges);
+            percentShopping = ((sumShopping / (num2-num3)) * 100);
+            shopping = (int) Math.round(percentShopping);
+            percentPleasures = ((sumPleasures / (num2-num3)) * 100);
+            pleasures = (int) Math.round(percentPleasures);
+            percentHobby = ((sumHobby / (num2-num3)) * 100);
+            hobby = (int) Math.round(percentHobby);
+
+            textView_analysis.setText("W tym miesiącu zostało niewykorzystane " + differInt + "% budżetu." + " " + "Procentowy udział wydatków:"
+                    + " opłaty - " + charges + "%" + " zakupy - " + shopping + "%" + " przyjemności - " + pleasures + "%" + " hobby - " + hobby +"%");
             textView_analysis.invalidate();
-            //Log.d("czemu", "onCreate: "+ num1 + " " + num2 + " " + num3 + " " + difference + " " + differInt);
 
         }else if (num1 == (num2-num3)) {
 
-            textView_analysis.setText("Wykorzystałeś 100% swojego miesięcznego budżetu");
+            percentCharges = ((sumCharges / (num2-num3)) * 100);
+            charges = (int) Math.round(percentCharges);
+            percentShopping = ((sumShopping / (num2-num3)) * 100);
+            shopping = (int) Math.round(percentShopping);
+            percentPleasures = ((sumPleasures / (num2-num3)) * 100);
+            pleasures = (int) Math.round(percentPleasures);
+            percentHobby = ((sumHobby / (num2-num3)) * 100);
+            hobby = (int) Math.round(percentHobby);
+
+            textView_analysis.setText("Wykorzystałeś 100% swojego miesięcznego budżetu" + " " + "Procentowy udział wydatków:"
+                    + " opłaty - " + charges + "%" + " zakupy - " + shopping + "%" + " przyjemności - " + pleasures + "%" + " hobby - " + hobby +"%");
 
         }else if (num1 > (num2-num3)) {
 
             over = num1 - (num2 - num3);
             difference2 = (over / (num2 - num3) * 100);
             differInt2 = (int) Math.round(difference2);
-            textView_analysis.setText("Twój miesięczny budżet został przekroczony o " + differInt2 +"%");
+            percentCharges = ((sumCharges / (num2-num3)) * 100);
+            charges = (int) Math.round(percentCharges);
+            percentShopping = ((sumShopping / (num2-num3)) * 100);
+            shopping = (int) Math.round(percentShopping);
+            percentPleasures = ((sumPleasures / (num2-num3)) * 100);
+            pleasures = (int) Math.round(percentPleasures);
+            percentHobby = ((sumHobby / (num2-num3)) * 100);
+            hobby = (int) Math.round(percentHobby);
+
+            textView_analysis.setText("Twój miesięczny budżet został przekroczony o " + differInt2 +"%" + " " + "Procentowy udział wydatków:"
+                    + " opłaty - " + charges + "%" + " zakupy - " + shopping + "%" + " przyjemności - " + pleasures + "%" + " hobby - " + hobby +"%");
             textView_analysis.invalidate();
         }else{}
     }
@@ -148,4 +190,5 @@ public class MainActivity extends AppCompatActivity {
         customArrayAdapter = new ArrayAdapter<Amount>(MainActivity.this, android.R.layout.simple_list_item_1, dataBaseHelper.showEverything());
         expensesList.setAdapter(customArrayAdapter);
     }
+    public void onBackPressed(){ }
 }
