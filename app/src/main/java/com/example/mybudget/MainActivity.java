@@ -3,6 +3,7 @@ package com.example.mybudget;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,8 +16,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -25,13 +28,12 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button button;
     private Button addNewAmount;
     private ListView expensesList;
     private TextView textView_month;
     private TextView textView_analysis;
     private Integer month;
-    private Integer expensesSum, differInt, differInt2;
+    private Integer differInt, differInt2;
     private Double num1, num2, num3, difference, difference2, percent, over;
     private Double sumShopping, sumHobby, sumPleasures, sumCharges;
     private Double percentShopping, percentHobby, percentPleasures, percentCharges;
@@ -44,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("preferences", 0);
+        SharedPreferences sharedPreferences = getSharedPreferences("preferences", MODE_PRIVATE);
         boolean firstRun = sharedPreferences.getBoolean("firstRun", true);
         if(firstRun){
 
@@ -88,12 +90,12 @@ public class MainActivity extends AppCompatActivity {
 
         setTextInAnalyseView(sqLiteDatabase);
 
-
         expensesList = findViewById(R.id.expenses_list);
         addNewAmount = findViewById(R.id.add_new_amount);
         addNewAmount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Intent amount = new Intent(getApplicationContext(), NewAmount.class);
                 startActivity(amount);
             }
@@ -107,7 +109,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Amount clickedExpens = (Amount) parent.getItemAtPosition(position);
-
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle("Usunięcie wydatku");

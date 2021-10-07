@@ -63,7 +63,5 @@ public class OneTimeDialog extends AppCompatActivity {
                 finish();
             }
         });
-
-
     }
 }

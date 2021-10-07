@@ -80,8 +80,6 @@ public class NewAmount extends AppCompatActivity {
         year=data.getYear()+1900;
         date= String.valueOf(year)+"-"+String.valueOf(month)+"-"+String.valueOf(day);
 
-
-
         addAmount = findViewById(R.id.add_amount);
         addAmount.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,7 +93,7 @@ public class NewAmount extends AppCompatActivity {
 
                     try {
                         amountAmount = new Amount(id, name.getText().toString(), getCurrentDate(), selectedCategory, selectedPeriod, amount.getText().toString());
-                        Toast.makeText(NewAmount.this, amountAmount.toString(), Toast.LENGTH_LONG).show();
+
                     }catch (Exception e){
                         amountAmount = new Amount(id, name.getText().toString(), "error", selectedCategory, "error", amount.getText().toString());
                     }
@@ -103,8 +101,6 @@ public class NewAmount extends AppCompatActivity {
                     DataBaseHelper dataBaseHelper = new DataBaseHelper(NewAmount.this);
 
                     boolean success = dataBaseHelper.addOne(amountAmount);
-
-                    Toast.makeText(NewAmount.this, "Success= "+ success, Toast.LENGTH_LONG).show();
 
                     Intent wroc = new Intent(NewAmount.this, MainActivity.class);
                     startActivity(wroc);
